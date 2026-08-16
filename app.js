@@ -1,65 +1,55 @@
 /**
  * 이향인(Otrovert) 성향 검사 애플리케이션
- * 40문항 7점 척도 설문 & 188점 기준 채점 엔진
+ * 40문항 단일 페이지 설문 & 188점 기준 채점 엔진
  */
 
-// ─── 40문항 데이터 정의 (001.JPG ~ 010.JPG 순서) ─────────────────────
+// ─── 40문항 데이터 정의 (1번 ~ 40번) ───────────────────────────
 const QUESTIONS_DATA = [
-  // 001.JPG (Q1-Q4)
   { id: 1, text: "나는 사람들이 많이 모인 곳에 있으면 외로움을 느낀다.", scoreType: "7to1", dimension: "social_indep" },
   { id: 2, text: "내 삶에서 진정으로 가까운 사람은 극소수다.", scoreType: "7to1", dimension: "social_indep" },
   { id: 3, text: "나는 파티를 즐기며 가능한 한 자주 참석한다.", scoreType: "1to7", dimension: "social_indep" },
   { id: 4, text: "나는 혼자만의 시간이 많이 필요하다.", scoreType: "7to1", dimension: "introspection" },
 
-  // 002.JPG (Q5-Q8)
   { id: 5, text: "슬플 때 나는 사람들이 곁에서 나를 위로해주길 바란다.", scoreType: "1to7", dimension: "autonomy" },
   { id: 6, text: "나는 혼자 있는 것을 좋아한다. 나 자신이 최고의 친구다.", scoreType: "7to1", dimension: "introspection" },
   { id: 7, text: "나는 요즘 유행하는 인기 장소에 관한 소식을 가장 먼저 듣는다.", scoreType: "1to7", dimension: "non_conform" },
   { id: 8, text: "나는 혼자 일하는 것을 좋아한다.", scoreType: "7to1", dimension: "autonomy" },
 
-  // 003.JPG (Q9-Q12)
   { id: 9, text: "나는 내 신념을 따르는 데 타인의 동의를 구하지 않는다.", scoreType: "7to1", dimension: "autonomy" },
   { id: 10, text: "나는 조직화된 종교의 신자다.", scoreType: "1to7", dimension: "non_conform" },
   { id: 11, text: "나는 소셜미디어를 자주 사용한다.", scoreType: "1to7", dimension: "social_indep" },
   { id: 12, text: "숨길 것은 없지만, 내 삶은 되도록 남에게 드러내지 않고 싶다.", scoreType: "7to1", dimension: "social_indep" },
 
-  // 004.JPG (Q13-Q16)
   { id: 13, text: "나는 통념을 믿지 않는다. 그것은 집단 사고일 뿐이다.", scoreType: "7to1", dimension: "non_conform" },
   { id: 14, text: "나는 사색을 하나의 활동으로 여긴다.", scoreType: "7to1", dimension: "introspection" },
   { id: 15, text: "나는 삶의 적극적 참여자가 아닌 관찰자다.", scoreType: "7to1", dimension: "introspection" },
   { id: 16, text: "나는 혼자 있는 것을 좋아하지 않는다.", scoreType: "1to7", dimension: "social_indep" },
 
-  // 005.JPG (Q17-Q20)
   { id: 17, text: "대부분의 사람이 내가 수줍음이 많다는 걸 모르는 것 같다.", scoreType: "7to1", dimension: "introspection" },
   { id: 18, text: "나는 밝은색 옷을 좋아한다. 그래야 군중 속에서 내가 두드러지기 때문이다.", scoreType: "1to7", dimension: "social_indep" },
   { id: 19, text: "나는 주변 사람들로부터 관심받는 것을 좋아한다.", scoreType: "1to7", dimension: "social_indep" },
-  { id: 20, 다른_사람들의_의견: "다른 사람들의 의견은 내게 매우 중요하다.", text: "다른 사람들의 의견은 내게 매우 중요하다.", scoreType: "1to7", dimension: "autonomy" },
+  { id: 20, text: "다른 사람들의 의견은 내게 매우 중요하다.", scoreType: "1to7", dimension: "autonomy" },
 
-  // 006.JPG (Q21-Q24)
   { id: 21, text: "일하는 공간을 공유하면 아이디어를 나누기에 좋다고 생각한다.", scoreType: "1to7", dimension: "autonomy" },
   { id: 22, text: "나는 다른 사람들이 내 의견에 동의할 때 기분이 좋다.", scoreType: "1to7", dimension: "autonomy" },
   { id: 23, text: "나는 소수자가 되어도 개의치 않는다.", scoreType: "7to1", dimension: "non_conform" },
   { id: 24, text: "나는 외부에서 주어진 생각을 따르기보다 내 삶을 이끌 나만의 철학을 세우는 편이다.", scoreType: "7to1", dimension: "autonomy" },
 
-  // 007.JPG (Q25-Q28)
   { id: 25, text: "나는 이해받기를 원한다.", scoreType: "1to7", dimension: "social_indep" },
   { id: 26, text: "나는 가끔 내 생각이 두려울 때가 있다.", scoreType: "7to1", dimension: "introspection" },
   { id: 27, text: "나는 내 견해를 갖고 있으며 그것이 맞다고 생각한다.", scoreType: "7to1", dimension: "autonomy" },
   { id: 28, text: "모든 질문에는 답이 있다고 생각한다.", scoreType: "1to7", dimension: "non_conform" },
 
-  // 008.JPG (Q29-Q32)
   { id: 29, text: "나는 어떤 생각이나 개념이든 스스로 검토해보기 전에는 받아들이지 않는다.", scoreType: "7to1", dimension: "non_conform" },
   { id: 30, text: "나는 나 자신의 주인이어야 한다.", scoreType: "7to1", dimension: "autonomy" },
   { id: 31, text: "모든 문제에는 가능한 여러 해결책이 있다고 생각한다.", scoreType: "7to1", dimension: "non_conform" },
   { id: 32, text: "나는 선생님이나 상사는 언제나 옳다고 생각한다.", scoreType: "1to7", dimension: "non_conform" },
 
-  // 009.JPG (Q33-Q36)
   { id: 33, text: "나는 회의를 할 때 가장 좋은 아이디어가 떠오르곤 한다.", scoreType: "1to7", dimension: "autonomy" },
   { id: 34, text: "나는 전문 분야 하나에만 집중하기보다 다방면에 관심이 많다.", scoreType: "7to1", dimension: "non_conform" },
   { id: 35, text: "나는 스스로에게 의지한다. 타인에게 도움을 청하는 것은 내게 어려운 일이다.", scoreType: "7to1", dimension: "autonomy" },
   { id: 36, text: "나에 관한 이야기를 공유할 때, 모든 세부 사항까지 정확히 전달하려 한다.", scoreType: "1to7", dimension: "social_indep" },
 
-  // 010.JPG (Q37-Q40)
   { id: 37, text: "진정한 지혜는 세대를 거쳐 내려오는 것뿐이라고 믿는다.", scoreType: "1to7", dimension: "non_conform" },
   { id: 38, text: "나는 권위 있는 인물들을 깊이 존경한다.", scoreType: "1to7", dimension: "non_conform" },
   { id: 39, text: "나는 새로운 생각을 좋아한다.", scoreType: "7to1", dimension: "non_conform" },
@@ -68,13 +58,13 @@ const QUESTIONS_DATA = [
 
 // 7점 척도 선택지 옵션 (index 0 ~ 6)
 const SCALE_OPTIONS = [
-  { label: "매우 그렇다", desc: "강한 동의" },
-  { label: "꽤 그렇다", desc: "동의" },
-  { label: "그렇다", desc: "약한 동의" },
-  { label: "보통이다", desc: "중립" },
-  { label: "그렇지 않다", desc: "약한 비동의" },
-  { label: "꽤 그렇지 않다", desc: "비동의" },
-  { label: "전혀 그렇지 않다", desc: "강한 비동의" }
+  { label: "매우 그렇다" },
+  { label: "꽤 그렇다" },
+  { label: "그렇다" },
+  { label: "보통이다" },
+  { label: "그렇지 않다" },
+  { label: "꽤 그렇지 않다" },
+  { label: "전혀 그렇지 않다" }
 ];
 
 // 세부 하위 영역 정의
@@ -85,15 +75,14 @@ const DIMENSIONS = {
   social_indep: { name: "타인 시선 및 인정 독립", color: "#f59e0b" }
 };
 
-const ITEMS_PER_PAGE = 4;
-const TOTAL_PAGES = 10;
+const TOTAL_QUESTIONS = QUESTIONS_DATA.length; // 40
 const STORAGE_KEY = "otrovert_survey_answers_v1";
 
 // ─── 상태 관리 ────────────────────────────────────────────────
 let state = {
-  currentPage: 0, // 0-based: 0 ~ 9
   answers: {},    // { questionId: optionIndex (0~6) }
-  theme: localStorage.getItem("otrovert_theme") || "dark"
+  theme: localStorage.getItem("otrovert_theme") || "dark",
+  pendingFocusId: null // 미응답 문항 포커스 타겟 ID
 };
 
 // ─── DOM References ──────────────────────────────────────────
@@ -108,20 +97,16 @@ const elements = {
   resumeBanner: document.getElementById("resume-banner"),
   resumeBtn: document.getElementById("resume-btn"),
   
-  // Survey Header
-  fileBadge: document.getElementById("file-badge"),
-  stepText: document.getElementById("step-text"),
+  // Survey Progress
+  answeredCountBadge: document.getElementById("answered-count-badge"),
   progressPercent: document.getElementById("progress-percent"),
   progressFill: document.getElementById("progress-fill"),
   
-  // Survey Body
+  // Survey Body & Submit
   questionsContainer: document.getElementById("questions-container"),
-  prevPageBtn: document.getElementById("prev-page-btn"),
-  nextPageBtn: document.getElementById("next-page-btn"),
-  nextBtnText: document.getElementById("next-btn-text"),
-  quickDotsContainer: document.getElementById("quick-dots-container"),
+  submitSurveyBtn: document.getElementById("submit-survey-btn"),
   
-  // Result
+  // Result Elements
   resultTypeBadge: document.getElementById("result-type-badge"),
   resultDate: document.getElementById("result-date"),
   totalScoreVal: document.getElementById("total-score-val"),
@@ -135,6 +120,12 @@ const elements = {
   savePdfBtn: document.getElementById("save-pdf-btn"),
   restartBtn: document.getElementById("restart-btn"),
   
+  // Modal for Unanswered questions
+  unansweredModal: document.getElementById("unanswered-modal"),
+  modalUnansweredCount: document.getElementById("modal-unanswered-count"),
+  modalTargetQuestion: document.getElementById("modal-target-question"),
+  modalConfirmBtn: document.getElementById("modal-confirm-btn"),
+  
   // Theme & Toast
   themeToggleBtn: document.getElementById("theme-toggle-btn"),
   toast: document.getElementById("toast")
@@ -145,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   loadSavedAnswers();
   setupEventListeners();
-  renderQuickDots();
 });
 
 // ─── 테마 설정 ────────────────────────────────────────────────
@@ -171,7 +161,7 @@ function loadSavedAnswers() {
     if (saved) {
       state.answers = JSON.parse(saved);
       const answeredCount = Object.keys(state.answers).length;
-      if (answeredCount > 0 && answeredCount < 40) {
+      if (answeredCount > 0 && answeredCount < TOTAL_QUESTIONS) {
         elements.resumeBanner.classList.remove("hidden");
       }
     }
@@ -190,67 +180,34 @@ function saveAnswers() {
 
 // ─── 이벤트 리스너 등록 ────────────────────────────────────────
 function setupEventListeners() {
-  // 시작 버튼
+  // 시작 버튼 (40문항 렌더링)
   elements.startBtn.addEventListener("click", () => {
     switchView("survey");
-    state.currentPage = 0;
-    renderPage();
+    renderAllQuestions();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   // 이어하기 버튼
   elements.resumeBtn.addEventListener("click", () => {
     switchView("survey");
-    // 미답변 첫 페이지 찾기
-    let targetPage = 0;
-    for (let p = 0; p < TOTAL_PAGES; p++) {
-      const startIdx = p * ITEMS_PER_PAGE;
-      const pageQuestions = QUESTIONS_DATA.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-      const isComplete = pageQuestions.every(q => state.answers[q.id] !== undefined);
-      if (!isComplete) {
-        targetPage = p;
-        break;
-      }
-    }
-    state.currentPage = targetPage;
-    renderPage();
-  });
-
-  // 이전/다음 페이지
-  elements.prevPageBtn.addEventListener("click", () => {
-    if (state.currentPage > 0) {
-      state.currentPage--;
-      renderPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    renderAllQuestions();
+    // 첫 번째 미응답 문항으로 부드럽게 스크롤
+    const firstUnanswered = QUESTIONS_DATA.find(q => state.answers[q.id] === undefined);
+    if (firstUnanswered) {
+      setTimeout(() => {
+        focusQuestion(firstUnanswered.id);
+      }, 300);
     }
   });
 
-  elements.nextPageBtn.addEventListener("click", () => {
-    // 현재 페이지 4문항 응답 완료 여부 검사
-    const startIdx = state.currentPage * ITEMS_PER_PAGE;
-    const pageQuestions = QUESTIONS_DATA.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-    const unAnswered = pageQuestions.filter(q => state.answers[q.id] === undefined);
+  // 결과 확인하기 버튼
+  elements.submitSurveyBtn.addEventListener("click", handleSubmitSurvey);
 
-    if (unAnswered.length > 0) {
-      // 미응답 문항 하이라이트
-      unAnswered.forEach(q => {
-        const card = document.getElementById(`q-card-${q.id}`);
-        if (card) {
-          card.classList.add("unanswered-alert");
-          setTimeout(() => card.classList.remove("unanswered-alert"), 800);
-        }
-      });
-      showToast(`남은 ${unAnswered.length}개 문항에 답변해주세요.`);
-      return;
-    }
-
-    // 다음 페이지 or 결과 화면
-    if (state.currentPage < TOTAL_PAGES - 1) {
-      state.currentPage++;
-      renderPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      // 40문항 전체 완료 시 결과 표시
-      finishSurvey();
+  // 모달 확인 버튼 클릭 시 해당 문항으로 이동
+  elements.modalConfirmBtn.addEventListener("click", () => {
+    closeUnansweredModal();
+    if (state.pendingFocusId) {
+      focusQuestion(state.pendingFocusId);
     }
   });
 
@@ -270,65 +227,16 @@ function switchView(viewName) {
   }
 }
 
-// ─── 빠른 이동 닷(Dot) 렌더링 ────────────────────────────────
-function renderQuickDots() {
-  elements.quickDotsContainer.innerHTML = "";
-  for (let i = 0; i < TOTAL_PAGES; i++) {
-    const dot = document.createElement("button");
-    dot.className = `page-dot ${i === state.currentPage ? "active" : ""}`;
-    dot.setAttribute("aria-label", `${i + 1}단계로 이동`);
-    dot.addEventListener("click", () => {
-      state.currentPage = i;
-      renderPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    elements.quickDotsContainer.appendChild(dot);
-  }
-}
-
-function updateQuickDots() {
-  const dots = elements.quickDotsContainer.querySelectorAll(".page-dot");
-  dots.forEach((dot, idx) => {
-    const startIdx = idx * ITEMS_PER_PAGE;
-    const pageQuestions = QUESTIONS_DATA.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-    const isCompleted = pageQuestions.every(q => state.answers[q.id] !== undefined);
-
-    dot.className = "page-dot";
-    if (idx === state.currentPage) dot.classList.add("active");
-    if (isCompleted) dot.classList.add("completed");
-  });
-}
-
-// ─── 설문 페이지 렌더링 ──────────────────────────────────────
-function renderPage() {
-  const pageIndex = state.currentPage; // 0 ~ 9
-  const fileNum = String(pageIndex + 1).padStart(3, "0");
-  elements.fileBadge.textContent = `${fileNum}.JPG`;
-  elements.stepText.textContent = `${pageIndex + 1} / ${TOTAL_PAGES} 단계`;
-
-  // 진행률 계산
-  const totalAnswered = Object.keys(state.answers).length;
-  const progress = Math.round((totalAnswered / QUESTIONS_DATA.length) * 100);
-  elements.progressPercent.textContent = `${progress}%`;
-  elements.progressFill.style.width = `${progress}%`;
-
-  // 이전/다음 버튼 상태
-  elements.prevPageBtn.disabled = pageIndex === 0;
-  elements.nextBtnText.textContent = pageIndex === TOTAL_PAGES - 1 ? "결과 확인하기" : "다음 단계";
-
-  updateQuickDots();
-
-  // 4문항 렌더링
-  const startIdx = pageIndex * ITEMS_PER_PAGE;
-  const pageQuestions = QUESTIONS_DATA.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-
+// ─── 40개 문항 전체 렌더링 ────────────────────────────────────
+function renderAllQuestions() {
+  updateProgressUI();
   elements.questionsContainer.innerHTML = "";
 
-  pageQuestions.forEach((q) => {
+  QUESTIONS_DATA.forEach((q) => {
     const isAnswered = state.answers[q.id] !== undefined;
     const card = document.createElement("div");
     card.id = `q-card-${q.id}`;
-    card.className = `question-card animate ${isAnswered ? "answered" : ""}`;
+    card.className = `question-card ${isAnswered ? "answered" : ""}`;
 
     const head = document.createElement("div");
     head.className = "question-head";
@@ -347,9 +255,11 @@ function renderPage() {
       const isSelected = state.answers[q.id] === optIdx;
       const btn = document.createElement("button");
       btn.type = "button";
+      btn.id = `q-${q.id}-opt-${optIdx}`;
       btn.className = `likert-option-btn ${isSelected ? "selected" : ""}`;
       btn.setAttribute("role", "radio");
       btn.setAttribute("aria-checked", isSelected ? "true" : "false");
+      btn.setAttribute("aria-label", `${q.id}번 문항: ${opt.label}`);
       btn.innerHTML = `
         <span class="scale-dot"></span>
         <span class="scale-label">${opt.label}</span>
@@ -361,16 +271,17 @@ function renderPage() {
         
         // 카드 내 라디오 버튼 UI 업데이트
         const allBtns = scaleGrid.querySelectorAll(".likert-option-btn");
-        allBtns.forEach(b => b.classList.remove("selected"));
+        allBtns.forEach(b => {
+          b.classList.remove("selected");
+          b.setAttribute("aria-checked", "false");
+        });
         btn.classList.add("selected");
+        btn.setAttribute("aria-checked", "true");
         card.classList.add("answered");
+        card.classList.remove("unanswered-alert", "unanswered-target-focus");
 
         // 상단 진행률 갱신
-        const currentAnswered = Object.keys(state.answers).length;
-        const currentProgress = Math.round((currentAnswered / QUESTIONS_DATA.length) * 100);
-        elements.progressPercent.textContent = `${currentProgress}%`;
-        elements.progressFill.style.width = `${currentProgress}%`;
-        updateQuickDots();
+        updateProgressUI();
       });
 
       scaleGrid.appendChild(btn);
@@ -381,16 +292,85 @@ function renderPage() {
   });
 }
 
+// ─── 진행률 UI 갱신 ───────────────────────────────────────────
+function updateProgressUI() {
+  const answeredCount = Object.keys(state.answers).length;
+  const progressPercent = Math.round((answeredCount / TOTAL_QUESTIONS) * 100);
+
+  elements.answeredCountBadge.textContent = `${answeredCount} / ${TOTAL_QUESTIONS} 완료`;
+  elements.progressPercent.textContent = `${progressPercent}%`;
+  elements.progressFill.style.width = `${progressPercent}%`;
+}
+
+// ─── 제출 및 미응답 검사 ──────────────────────────────────────
+function handleSubmitSurvey() {
+  // 미응답 문항 목록 검색
+  const unansweredList = QUESTIONS_DATA.filter(q => state.answers[q.id] === undefined);
+
+  if (unansweredList.length > 0) {
+    const firstUnanswered = unansweredList[0];
+    state.pendingFocusId = firstUnanswered.id;
+
+    // 미응답 모달 팝업 표시
+    elements.modalUnansweredCount.textContent = unansweredList.length;
+    elements.modalTargetQuestion.textContent = `첫 번째 미응답 문항(#${firstUnanswered.id}번)`;
+    openUnansweredModal();
+    return;
+  }
+
+  // 40문항 전체 완료 시 결과 화면으로 전환
+  finishSurvey();
+}
+
+// ─── 모달 제어 ────────────────────────────────────────────────
+function openUnansweredModal() {
+  elements.unansweredModal.classList.add("active");
+  elements.unansweredModal.setAttribute("aria-hidden", "false");
+  elements.modalConfirmBtn.focus();
+}
+
+function closeUnansweredModal() {
+  elements.unansweredModal.classList.remove("active");
+  elements.unansweredModal.setAttribute("aria-hidden", "true");
+}
+
+// ─── 특정 문항으로 스크롤 및 포커스 이동 ──────────────────────
+function focusQuestion(questionId) {
+  const targetCard = document.getElementById(`q-card-${questionId}`);
+  if (!targetCard) return;
+
+  // 기존 하이라이트 초기화
+  document.querySelectorAll(".question-card").forEach(c => {
+    c.classList.remove("unanswered-alert", "unanswered-target-focus");
+  });
+
+  // 강조 클래스 추가
+  targetCard.classList.add("unanswered-alert", "unanswered-target-focus");
+
+  // 부드럽게 화면 중앙으로 스크롤
+  targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  // 첫 번째 선택지 버튼으로 키보드 포커스 이동
+  const firstOption = document.getElementById(`q-${questionId}-opt-0`);
+  if (firstOption) {
+    setTimeout(() => {
+      firstOption.focus({ preventScroll: true });
+    }, 400);
+  }
+
+  // 안내 토스트
+  showToast(`#${questionId}번 문항에 답변해주세요.`);
+}
+
 // ─── 점수 계산 엔진 ──────────────────────────────────────────
 function calculateQuestionScore(q, optionIndex) {
   // optionIndex: 0 (매우 그렇다) ~ 6 (전혀 그렇지 않다)
   if (optionIndex === undefined) return 0;
   if (q.scoreType === "7to1") {
-    // 0: 7점, 1: 6점, 2: 5점, 3: 4점, 4: 3점, 5: 2점, 6: 1점
+    // 정방향: 0: 7점, 1: 6점, 2: 5점, 3: 4점, 4: 3점, 5: 2점, 6: 1점
     return 7 - optionIndex;
   } else {
-    // 1to7 역방향 배점
-    // 0: 1점, 1: 2점, 2: 3점, 3: 4점, 4: 5점, 5: 6점, 6: 7점
+    // 역방향 (1to7): 0: 1점, 1: 2점, 2: 3점, 3: 4점, 4: 5점, 5: 6점, 6: 7점
     return optionIndex + 1;
   }
 }
@@ -426,7 +406,7 @@ function calculateScores() {
     });
   });
 
-  // 하위 영역별 백분율 점수 (최대 7점 기준)
+  // 하위 영역별 백분율 점수
   const dimPercentages = {};
   Object.keys(dimScores).forEach(key => {
     const { total, count } = dimScores[key];
@@ -771,7 +751,6 @@ function copyResultSummary() {
 function restartSurvey() {
   if (confirm("검사 기록을 초기화하고 처음부터 다시 시작하시겠습니까?")) {
     state.answers = {};
-    state.currentPage = 0;
     localStorage.removeItem(STORAGE_KEY);
     elements.resumeBanner.classList.add("hidden");
     switchView("intro");
