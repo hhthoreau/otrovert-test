@@ -117,7 +117,6 @@ const elements = {
   dimensionBarsContainer: document.getElementById("dimension-bars-container"),
   breakdownTableWrapper: document.getElementById("breakdown-table-wrapper"),
   copyResultBtn: document.getElementById("copy-result-btn"),
-  savePdfBtn: document.getElementById("save-pdf-btn"),
   restartBtn: document.getElementById("restart-btn"),
   
   // Modal for Unanswered questions
@@ -213,7 +212,6 @@ function setupEventListeners() {
 
   // 결과 액션
   elements.copyResultBtn.addEventListener("click", copyResultSummary);
-  elements.savePdfBtn.addEventListener("click", () => window.print());
   elements.restartBtn.addEventListener("click", restartSurvey);
 }
 
@@ -564,8 +562,8 @@ function renderRadarChart(dimData) {
   const canvas = document.getElementById("radar-chart-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
-  const width = 320;
-  const height = 280;
+  const width = 340;
+  const height = 290;
   const dpr = window.devicePixelRatio || 1;
 
   canvas.width = width * dpr;
@@ -574,7 +572,7 @@ function renderRadarChart(dimData) {
 
   const centerX = width / 2;
   const centerY = height / 2 + 10;
-  const maxRadius = 80;
+  const maxRadius = 88;
 
   const isLight = document.documentElement.getAttribute("data-theme") === "light";
   const gridColor = isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)";
@@ -615,10 +613,10 @@ function renderRadarChart(dimData) {
     ctx.stroke();
 
     // 레이블 출력
-    const labelDist = maxRadius + 22;
+    const labelDist = maxRadius + 24;
     const labelX = centerX + labelDist * Math.cos(angle);
     const labelY = centerY + labelDist * Math.sin(angle);
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 12px sans-serif";
     ctx.fillStyle = textColor;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
